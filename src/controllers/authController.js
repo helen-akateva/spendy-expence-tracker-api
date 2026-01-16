@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
-import 'express-async-errors';
 import { User } from '../models/user.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
