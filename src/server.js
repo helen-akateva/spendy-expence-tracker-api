@@ -19,6 +19,7 @@ const PORT = process.env.PORT ?? 3000;
 // Middleware
 app.use(logger);
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 app.use(categoriesRoutes);
@@ -27,7 +28,6 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello in my app!' });
 });
 
-app.use(cookieParser());
 app.use('/auth', auth);
 
 // 404 і обробник помилок
