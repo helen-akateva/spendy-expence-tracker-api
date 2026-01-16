@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import 'dotenv/config';
+import cookieParser from 'cookie-parser';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import auth from './routes/auth.js';
 
 import categoriesRoutes from './routes/categories.js';
 import { seedCategories } from './seeds/categoriesSeed.js';
@@ -24,6 +26,9 @@ app.use(categoriesRoutes);
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello in my app!' });
 });
+
+app.use(cookieParser());
+app.use('/auth', auth);
 
 // 404 і обробник помилок
 app.use(notFoundHandler);
