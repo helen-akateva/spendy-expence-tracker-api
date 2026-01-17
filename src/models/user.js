@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
       minlength: 2,
@@ -33,13 +33,6 @@ const userSchema = new Schema(
     versionKey: false,
   },
 );
-
-userSchema.pre('save', function (next) {
-  if (!this.username) {
-    this.username = this.email;
-  }
-  next();
-});
 
 userSchema.methods.toJSON = function () {
   const copiedObj = this.toObject();
