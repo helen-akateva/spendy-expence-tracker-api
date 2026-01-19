@@ -8,9 +8,10 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import auth from './routes/auth.js';
-
 import categoriesRoutes from './routes/categories.js';
 import { seedCategories } from './seeds/categoriesSeed.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger.js';
 
 const app = express();
 
@@ -21,6 +22,13 @@ app.use(logger);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+
+// Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 app.use(categoriesRoutes);
 
@@ -45,4 +53,5 @@ await seedCategories();
 
 app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
+  console.log(`Documentation Swagger: http://localhost:${PORT}/api-docs`);
 });
