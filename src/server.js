@@ -9,6 +9,7 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import auth from './routes/auth.js';
 import categoriesRoutes from './routes/categories.js';
+import transactionsRoutes from './routes/transactions.js';
 import summaryRoutes from './routes/summary.js';
 import { seedCategories } from './seeds/categoriesSeed.js';
 import swaggerUi from 'swagger-ui-express';
@@ -34,6 +35,7 @@ app.get('/api-docs.json', (req, res) => {
 app.use('/auth', auth);
 app.use(categoriesRoutes);
 app.use(summaryRoutes);
+app.use(transactionsRoutes);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello in my app!' });
