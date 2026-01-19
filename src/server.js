@@ -37,10 +37,6 @@ app.use(categoriesRoutes);
 app.use(summaryRoutes);
 app.use('/transactions', transactionRoutes);
 
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello in my app!' });
-});
-
 // 404 і обробник помилок
 app.use(notFoundHandler);
 app.use(errors());
