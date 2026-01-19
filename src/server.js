@@ -9,7 +9,6 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import auth from './routes/auth.js';
 import categoriesRoutes from './routes/categories.js';
-import transactionsRoutes from './routes/transactions.js';
 import summaryRoutes from './routes/summary.js';
 import transactionRoutes from './routes/transactions.js';
 import { seedCategories } from './seeds/categoriesSeed.js';
@@ -36,8 +35,6 @@ app.use('/auth', auth);
 app.use(categoriesRoutes);
 app.use(summaryRoutes);
 app.use('/transactions', transactionRoutes);
-app.use(transactionsRoutes);
-
 
 // 404 і обробник помилок
 app.use(notFoundHandler);
