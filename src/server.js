@@ -14,6 +14,7 @@ import transactionRoutes from './routes/transactions.js';
 import { seedCategories } from './seeds/categoriesSeed.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './config/swagger.js';
+import usersRoutes from './routes/users.js';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get('/api-docs.json', (req, res) => {
   res.send(swaggerSpec);
 });
 app.use('/auth', auth);
+app.use('/users', usersRoutes);
 app.use(categoriesRoutes);
 app.use(summaryRoutes);
 app.use('/transactions', transactionRoutes);
