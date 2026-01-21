@@ -2,22 +2,15 @@ import { Category } from '../models/category.js';
 
 export const getCategories = async (req, res, next) => {
   try {
-    // Отримати всі категорії
-    const categories = await Category.find().sort({ _id: 1 });
+    const { type } = req.query;
+    const filter = type ? { type } : {};
+    const categoriesQuery = Category.find(filter)
+      .sort({ _id: 1 })
+      .select('name');
 
-    // Розділити на доходи та витрати
-    const incomeCategories = categories
-      .filter((cat) => cat.type === 'income')
-      .map((cat) => cat.name);
+    const categories = await categoriesQuery;
 
-    const expenseCategories = categories
-      .filter((cat) => cat.type === 'expense')
-      .map((cat) => cat.name);
-
-    res.status(200).json({
-      incomes: incomeCategories,
-      expenses: expenseCategories,
-    });
+    res.status(200).json({ categories });
   } catch (error) {
     next(error);
   }
