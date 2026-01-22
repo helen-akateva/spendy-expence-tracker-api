@@ -3,7 +3,7 @@ import { Joi, Segments } from 'celebrate';
 export const createTransactionSchema = {
   [Segments.BODY]: Joi.object({
     type: Joi.string().valid('income', 'expense').required(),
-    category: Joi.string().hex().length(24).required(),
+    categoryId: Joi.string().hex().length(24).required(),
     amount: Joi.number().min(0.01).max(1000000).required(),
     date: Joi.string()
       .pattern(/^\d{4}-(0[1-9]|1[0-2])-[0-3]\d$/)

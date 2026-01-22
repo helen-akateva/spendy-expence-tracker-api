@@ -9,7 +9,7 @@ import { validateTransactionCategoryMatch } from '../services/transaction.js';
 
 export const createTransaction = async (req, res, next) => {
   try {
-    const { type, category: categoryId, amount, date, comment } = req.body;
+    const { type, categoryId, amount, date, comment } = req.body;
 
     await validateTransactionCategoryMatch(type, categoryId);
 
