@@ -25,19 +25,20 @@ const transactionSchema = new Schema(
     amount: {
       type: Number,
       required: true,
-      min: 0.01,
-      max: 1000000,
+      min: [0.01, 'Сума має бути більше 0'],
+      max: [1000000, 'Сума не може перевищувати 1000000'],
     },
 
     date: {
       type: String,
       required: true,
-      match: /^\d{4}-\d{2}-\d{2}$/,
+      match: [/^\d{4}-\d{2}-\d{2}$/, 'Дата має бути у форматі рррр-мм-дд'],
     },
 
     comment: {
       type: String,
-      maxlength: 192,
+      minlength: [2, 'Коментар має містити мінімум 2 символи'],
+      maxlength: [192, 'Коментар не може перевищувати 192 символи'],
       trim: true,
       default: '',
     },

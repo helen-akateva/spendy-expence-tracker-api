@@ -1,46 +1,44 @@
-import {
-  updateTransactionById,
-  deleteTransactionById,
-} from '../services/transaction.js';
 import createHttpError from 'http-errors';
 import { Transaction } from '../models/transaction.js';
 import { Category } from '../models/category.js';
+import {
+  deleteTransactionById,
+  updateTransactionById,
+} from '../services/transaction.js';
 
 export const createTransaction = async (req, res, next) => {
   try {
-    const { category: categoryName, ...rest } = req.body;
+    const { type, category: categoryName, amount, date, comment } = req.body;
 
     // Знайти категорію за ім'ям
     const categoryDoc = await Category.findOne({ name: categoryName });
     if (!categoryDoc) {
-      throw createHttpError(400, 'Invalid category');
+      throw createHttpError(400, 'Невірна категорія');
     }
 
-    // Валідація відповідності типу транзакції і категорії
-    const { type } = req.body;
-
-    if (type === 'income' && categoryDoc.name !== 'Incomes') {
+    // Валідація відповідності типу транзакції і типу категорії
+    if (type !== categoryDoc.type) {
       throw createHttpError(
         400,
-        'Для доходів можна використовувати тільки категорію "Incomes"',
-      );
-    }
-
-    if (type === 'expense' && categoryDoc.name === 'Incomes') {
-      throw createHttpError(
-        400,
-        'Категорія "Incomes" може використовуватись тільки для доходів',
+        `Категорія "${categoryName}" не може використовуватись для ${type === 'income' ? 'доходів' : 'витрат'}`,
       );
     }
 
     // Створити транзакцію
-    const transaction = await Transaction.create({
-      ...rest,
+    const transactionData = {
+      type,
       category: categoryDoc._id,
+      amount,
+      date,
       userId: req.user._id,
-    });
+    };
 
-    // Повернути з populate
+    if (comment && comment.trim()) {
+      transactionData.comment = comment.trim();
+    }
+
+    const transaction = await Transaction.create(transactionData);
+
     const populatedTransaction = await Transaction.findById(
       transaction._id,
     ).populate('category', 'name type');
@@ -50,7 +48,6 @@ export const createTransaction = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getAllTransactions = async (req, res, next) => {
   try {
     const { _id: userId } = req.user;
@@ -58,7 +55,7 @@ export const getAllTransactions = async (req, res, next) => {
       .populate('category', 'name type')
       .sort({ date: -1 });
 
-    res.json(transactions);
+    res.json({ transactions });
   } catch (error) {
     next(error);
   }
@@ -68,20 +65,21 @@ export const updateTransaction = async (req, res, next) => {
   try {
     const { transactionId } = req.params;
     const userId = req.user._id;
+    const updateData = { ...req.body };
 
     // Якщо оновлюється category (передається ім'я), конвертуємо в ID
-    if (req.body.category) {
-      const categoryDoc = await Category.findOne({ name: req.body.category });
+    if (updateData.category) {
+      const categoryDoc = await Category.findOne({ name: updateData.category });
       if (!categoryDoc) {
-        throw createHttpError(400, 'Invalid category');
+        throw createHttpError(400, 'Невірна категорія');
       }
-      req.body.category = categoryDoc._id;
+      updateData.category = categoryDoc._id;
     }
 
     const updated = await updateTransactionById(
       transactionId,
       userId,
-      req.body,
+      updateData,
     );
 
     res.json(updated);
