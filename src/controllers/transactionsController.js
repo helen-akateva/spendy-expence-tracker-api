@@ -1,6 +1,4 @@
-import createHttpError from 'http-errors';
 import { Transaction } from '../models/transaction.js';
-import { Category } from '../models/category.js';
 import {
   deleteTransactionById,
   updateTransactionById,
@@ -18,7 +16,7 @@ export const createTransaction = async (req, res, next) => {
       category: categoryId,
       amount,
       date,
-      comment: comment?.trim(),
+      comment: comment?.trim() || '',
       userId: req.user._id,
     });
 
@@ -48,15 +46,15 @@ export const updateTransaction = async (req, res, next) => {
   try {
     const { transactionId } = req.params;
     const userId = req.user._id;
-    const updateData = { ...req.body };
 
-    // Якщо оновлюється category (передається ім'я), конвертуємо в ID
-    if (updateData.category) {
-      const categoryDoc = await Category.findOne({ name: updateData.category });
-      if (!categoryDoc) {
-        throw createHttpError(400, 'Невірна категорія');
-      }
-      updateData.category = categoryDoc._id;
+    const { categoryId, ...rest } = req.body;
+
+    const updateData = {
+      ...rest,
+    };
+
+    if (categoryId) {
+      updateData.category = categoryId;
     }
 
     const updated = await updateTransactionById(

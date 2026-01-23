@@ -11,7 +11,7 @@ export const createTransactionSchema = {
       .messages({
         'string.pattern.base': 'Дата має бути у форматі YYYY-MM-DD',
       }),
-    comment: Joi.string().min(2).max(192).optional(),
+    comment: Joi.string().min(2).max(192).allow('').optional(),
   }),
 };
 

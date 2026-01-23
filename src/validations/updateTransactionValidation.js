@@ -13,7 +13,7 @@ export const updateTransactionSchema = {
   [Segments.BODY]: Joi.object({
     type: Joi.string().valid('income', 'expense'),
 
-    category: Joi.string().hex().length(24),
+    categoryId: Joi.string().hex().length(24),
 
     amount: Joi.number().min(0.01).max(1000000),
 
