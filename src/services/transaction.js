@@ -32,7 +32,9 @@ export const updateTransactionById = async (transactionId, userId, data) => {
   const oldTransaction = await Transaction.findOne({
     _id: transactionId,
     userId,
-  }).populate('category');
+  })
+    .populate('category')
+    .lean();
 
   if (!oldTransaction) {
     const error = new Error(
@@ -53,7 +55,9 @@ export const updateTransactionById = async (transactionId, userId, data) => {
     { _id: transactionId, userId },
     data,
     { new: true, runValidators: true },
-  ).populate('category');
+  )
+    .populate('category')
+    .lean();
 
   return { oldTransaction, updatedTransaction };
 };
@@ -63,7 +67,7 @@ export const deleteTransactionById = async (transactionId, userId) => {
   const deleted = await Transaction.findOneAndDelete({
     _id: transactionId,
     userId,
-  });
+  }).lean();
 
   if (!deleted) {
     const error = new Error(
