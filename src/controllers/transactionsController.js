@@ -94,6 +94,26 @@ export const updateTransaction = async (req, res, next) => {
     const updateData = { ...rest };
     if (categoryId) updateData.category = categoryId;
 
+    // Get old transaction to check type change
+    const oldTransaction = await Transaction.findOne({
+      _id: transactionId,
+      userId,
+    });
+
+    if (!oldTransaction) {
+      const error = new Error('Транзакцію не знайдено');
+      error.status = 404;
+      throw error;
+    }
+
+    // Validate balance if changing to expense or updating expense amount
+    const newType = updateData.type || oldTransaction.type;
+    const newAmount = updateData.amount || oldTransaction.amount;
+
+    if (newType === 'expense') {
+      await validateSufficientBalance(userId, newAmount, transactionId);
+    }
+
     const { updatedTransaction } = await updateTransactionById(
       transactionId,
       userId,
