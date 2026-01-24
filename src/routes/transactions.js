@@ -11,11 +11,9 @@ import {
 import {
   createTransaction,
   getAllTransactions,
+  updateTransaction,
+  deleteTransaction,
 } from '../controllers/transactionsController.js';
-import {
-  updateTransactionById,
-  deleteTransactionById,
-} from '../services/transaction.js';
 import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
@@ -239,22 +237,7 @@ router.patch(
   '/:transactionId',
   authenticate,
   celebrate({ ...transactionIdSchema, ...updateTransactionSchema }),
-  async (req, res, next) => {
-    try {
-      const { transactionId } = req.params;
-      const userId = req.user._id;
-
-      const updated = await updateTransactionById(
-        transactionId,
-        userId,
-        req.body,
-      );
-
-      res.status(200).json(updated);
-    } catch (err) {
-      next(err);
-    }
-  },
+  updateTransaction,
 );
 
 /**
@@ -288,18 +271,7 @@ router.delete(
   '/:transactionId',
   authenticate,
   celebrate(transactionIdSchema),
-  async (req, res, next) => {
-    try {
-      const { transactionId } = req.params;
-      const userId = req.user._id;
-
-      await deleteTransactionById(transactionId, userId);
-
-      res.status(204).send();
-    } catch (err) {
-      next(err);
-    }
-  },
+  deleteTransaction,
 );
 
 export default router;
