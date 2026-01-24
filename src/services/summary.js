@@ -15,6 +15,12 @@ export const getSummaryForMonth = async (period, userId) => {
   const categoryMap = new Map();
 
   for (const tx of transactions) {
+    // Skip transactions with missing/deleted categories
+    if (!tx.category) {
+      console.warn(`Transaction ${tx._id} has missing category`);
+      continue;
+    }
+
     const catName = tx.category.name;
     const catType = tx.category.type;
 
