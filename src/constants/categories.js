@@ -1,5 +1,8 @@
 export const CATEGORIES = [
-  { name: 'Incomes', type: 'income' },
+  { name: 'Salary', type: 'income' },
+  { name: 'Bonus', type: 'income' },
+  { name: 'Gift', type: 'income' },
+  { name: 'Other', type: 'income' },
 
   { name: 'Main expenses', type: 'expense' },
   { name: 'Products', type: 'expense' },
