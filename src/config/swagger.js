@@ -24,11 +24,11 @@ const options = {
     ],
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          description: 'JWT Authorization header. Format: "Bearer {token}"',
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'accessToken',
+          description: 'Session cookie for authentication. Automatically set after login.',
         },
       },
       responses: {
