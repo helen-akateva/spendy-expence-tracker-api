@@ -12,31 +12,33 @@ export const getCurrentUser = async (req, res, next) => {
   }
 };
 
+// Helper function to automatically recalculate balance
+export const autoRecalculateBalance = async (userId) => {
+  const transactions = await Transaction.find({ userId });
+
+  let balance = 0;
+  for (const transaction of transactions) {
+    if (transaction.type === 'income') {
+      balance += transaction.amount;
+    } else {
+      balance -= transaction.amount;
+    }
+  }
+
+  await User.findByIdAndUpdate(userId, { balance });
+  return balance;
+};
+
 export const recalculateBalance = async (req, res, next) => {
   try {
     const userId = req.user._id;
 
-    // Get all user transactions
-    const transactions = await Transaction.find({ userId });
+    const balance = await autoRecalculateBalance(userId);
 
-    // Calculate total balance from all transactions
-    let balance = 0;
-    for (const transaction of transactions) {
-      if (transaction.type === 'income') {
-        balance += transaction.amount;
-      } else {
-        balance -= transaction.amount;
-      }
-    }
-
-    // Update user balance
-    await User.findByIdAndUpdate(userId, { balance });
-
-    const updatedUser = await User.findById(userId);
     res.json({
       message: 'Balance recalculated successfully',
-      balance: updatedUser.balance,
-      transactionsCount: transactions.length,
+      balance,
+      transactionsCount: (await Transaction.find({ userId })).length,
     });
   } catch (error) {
     next(error);

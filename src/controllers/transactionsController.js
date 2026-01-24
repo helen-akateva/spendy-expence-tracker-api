@@ -6,6 +6,7 @@ import {
 } from '../services/transaction.js';
 
 import { validateTransactionCategoryMatch } from '../services/transaction.js';
+import { autoRecalculateBalance } from './users.js';
 
 export const createTransaction = async (req, res, next) => {
   try {
@@ -23,12 +24,8 @@ export const createTransaction = async (req, res, next) => {
       userId,
     });
 
-    // 🔥 ОНОВЛЮЄМО БАЛАНС
-    const balanceChange = type === 'income' ? amount : -amount;
-
-    await User.findByIdAndUpdate(userId, {
-      $inc: { balance: balanceChange },
-    });
+    // 🔥 АВТОМАТИЧНО ПЕРЕРАХОВУЄМО БАЛАНС
+    await autoRecalculateBalance(userId);
 
     const populatedTransaction = await Transaction.findById(
       transaction._id,
@@ -63,54 +60,17 @@ export const updateTransaction = async (req, res, next) => {
     const updateData = { ...rest };
     if (categoryId) updateData.category = categoryId;
 
-    console.log('🔍 UPDATE REQUEST:', { transactionId, updateData });
-
     const { oldTransaction, updatedTransaction } = await updateTransactionById(
       transactionId,
       userId,
       updateData,
     );
 
-    console.log('📊 OLD TRANSACTION:', {
-      type: oldTransaction.type,
-      amount: oldTransaction.amount,
-    });
-    console.log('📊 NEW TRANSACTION:', {
-      type: updatedTransaction.type,
-      amount: updatedTransaction.amount,
-    });
-
-    // баланс ДО
-    const oldValue =
-      oldTransaction.type === 'income'
-        ? oldTransaction.amount
-        : -oldTransaction.amount;
-
-    // баланс ПІСЛЯ
-    const newValue =
-      updatedTransaction.type === 'income'
-        ? updatedTransaction.amount
-        : -updatedTransaction.amount;
-
-    // різниця
-    const balanceChange = newValue - oldValue;
-
-    console.log('💰 BALANCE CALCULATION:', {
-      oldValue,
-      newValue,
-      balanceChange,
-      userId: userId.toString(),
-    });
-
-    await User.findByIdAndUpdate(userId, {
-      $inc: { balance: balanceChange },
-    });
-
-    console.log('✅ Balance updated successfully');
+    // 🔥 АВТОМАТИЧНО ПЕРЕРАХОВУЄМО БАЛАНС
+    await autoRecalculateBalance(userId);
 
     res.json(updatedTransaction);
   } catch (err) {
-    console.error('❌ UPDATE ERROR:', err);
     next(err);
   }
 };
@@ -122,12 +82,8 @@ export const deleteTransaction = async (req, res, next) => {
 
     const deleted = await deleteTransactionById(transactionId, userId);
 
-    const balanceChange =
-      deleted.type === 'income' ? -deleted.amount : deleted.amount;
-
-    await User.findByIdAndUpdate(userId, {
-      $inc: { balance: balanceChange },
-    });
+    // 🔥 АВТОМАТИЧНО ПЕРЕРАХОВУЄМО БАЛАНС
+    await autoRecalculateBalance(userId);
 
     res.status(204).send();
   } catch (err) {
