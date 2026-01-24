@@ -87,11 +87,10 @@ const options = {
         },
       },
     },
-    // Глобальная авторизация для всех защищённых эндпоинтов
-    // (можно переопределить в конкретных роутах, поставив security: [])
+    // Global authentication for all protected endpoints
     security: [
       {
-        bearerAuth: [],
+        cookieAuth: [],
       },
     ],
   },

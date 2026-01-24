@@ -28,7 +28,7 @@ const validateSufficientBalance = async (userId, expenseAmount, excludeTransacti
   
   if (newBalance < 0) {
     const error = new Error(
-      `Недостатньо коштів. Поточний баланс: ${balance}, Необхідно: ${expenseAmount}`
+      `Insufficient funds. Current balance: ${balance}, Required: ${expenseAmount}`
     );
     error.status = 400;
     throw error;
@@ -101,7 +101,7 @@ export const updateTransaction = async (req, res, next) => {
     });
 
     if (!oldTransaction) {
-      const error = new Error('Транзакцію не знайдено');
+      const error = new Error('Transaction not found');
       error.status = 404;
       throw error;
     }

@@ -5,14 +5,14 @@ export const validateTransactionCategoryMatch = async (type, categoryId) => {
   const category = await Category.findById(categoryId);
 
   if (!category) {
-    const error = new Error('Категорію не знайдено');
+    const error = new Error('Category not found');
     error.status = 400;
     throw error;
   }
 
   if (type === 'income' && category.name !== 'Incomes') {
     const error = new Error(
-      'Для доходів можна використовувати тільки категорію "Incomes"',
+      'For income transactions, only "Incomes" category can be used',
     );
     error.status = 400;
     throw error;
@@ -20,7 +20,7 @@ export const validateTransactionCategoryMatch = async (type, categoryId) => {
 
   if (type === 'expense' && category.name === 'Incomes') {
     const error = new Error(
-      'Категорія "Incomes" може використовуватись тільки для доходів',
+      '"Incomes" category can only be used for income transactions',
     );
     error.status = 400;
     throw error;
@@ -38,7 +38,7 @@ export const updateTransactionById = async (transactionId, userId, data) => {
 
   if (!oldTransaction) {
     const error = new Error(
-      'Транзакцію не знайдено або вона не належить користувачу',
+      'Transaction not found or does not belong to user',
     );
     error.status = 404;
     throw error;
@@ -71,7 +71,7 @@ export const deleteTransactionById = async (transactionId, userId) => {
 
   if (!deleted) {
     const error = new Error(
-      'Транзакцію не знайдено або вона не належить користувачу',
+      'Transaction not found or does not belong to user',
     );
     error.status = 404;
     throw error;
