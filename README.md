@@ -24,6 +24,8 @@ REST API for tracking personal income and expenses with categorization, monthly 
 - Register and authenticate securely
 - Manage income and expense transactions
 - Organize transactions by predefined categories
+- **Automatic balance calculation** — balance updates automatically on every transaction
+- **Balance validation** — prevents negative balance (insufficient funds protection)
 - Generate monthly financial summaries
 - Track spending patterns by category and period
 
@@ -91,6 +93,7 @@ When testing the API using **Postman** or **Swagger UI**:
 ### User
 
 - `GET /users/current` — Get current authenticated user
+- `POST /users/recalculate-balance` — Manually recalculate user balance
 
 ### Categories
 
@@ -98,10 +101,13 @@ When testing the API using **Postman** or **Swagger UI**:
 
 ### Transactions
 
-- `POST /transactions` — Create a transaction
+- `POST /transactions` — Create a transaction (requires `categoryId`)
 - `GET /transactions` — Get all user transactions
-- `PATCH /transactions/:id` — Update transaction
+- `PATCH /transactions/:id` — Update transaction (requires `categoryId`)
 - `DELETE /transactions/:id` — Delete transaction
+
+> **Note:** Balance is automatically recalculated after every transaction operation.
+> Transactions with insufficient funds will be rejected with a 400 error.
 
 ### Reports
 
@@ -163,16 +169,17 @@ curl -X GET https://spendy-expence-tracker-api.onrender.com/users/current
 
 The API uses centralized error handling and returns standard HTTP status codes:
 
-| Code | Description                          |
-| ---: | ------------------------------------ |
-|  200 | Success                              |
-|  201 | Resource created                     |
-|  400 | Validation error                     |
-|  401 | Unauthorized                         |
-|  403 | Forbidden                            |
-|  404 | Not found                            |
-|  409 | Conflict (e.g. email already exists) |
-|  500 | Internal server error                |
+| Code | Description                                      |
+| ---: | ------------------------------------------------ |
+|  200 | Success                                          |
+|  201 | Resource created                                 |
+|  204 | Success with no content (e.g., delete)           |
+|  400 | Validation error or insufficient funds           |
+|  401 | Unauthorized                                     |
+|  403 | Forbidden                                        |
+|  404 | Not found                                        |
+|  409 | Conflict (e.g. email already exists)             |
+|  500 | Internal server error                            |
 
 ---
 
@@ -182,8 +189,11 @@ The API uses centralized error handling and returns standard HTTP status codes:
 - Centralized error handling
 - Request validation via Joi
 - Cookie-based authentication
+- **Automatic balance management** — real-time balance updates
+- **Balance validation** — prevents negative balance
 - Role-safe access to protected resources
 - Fully documented API with Swagger
+- All error messages in English
 
 ---
 
