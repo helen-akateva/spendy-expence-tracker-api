@@ -60,7 +60,7 @@ export const updateTransaction = async (req, res, next) => {
     const updateData = { ...rest };
     if (categoryId) updateData.category = categoryId;
 
-    const { oldTransaction, updatedTransaction } = await updateTransactionById(
+    const { updatedTransaction } = await updateTransactionById(
       transactionId,
       userId,
       updateData,
@@ -80,7 +80,7 @@ export const deleteTransaction = async (req, res, next) => {
     const { transactionId } = req.params;
     const userId = req.user._id;
 
-    const deleted = await deleteTransactionById(transactionId, userId);
+    await deleteTransactionById(transactionId, userId);
 
     // 🔥 АВТОМАТИЧНО ПЕРЕРАХОВУЄМО БАЛАНС
     await autoRecalculateBalance(userId);

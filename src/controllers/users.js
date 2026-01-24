@@ -16,23 +16,17 @@ export const getCurrentUser = async (req, res, next) => {
 export const autoRecalculateBalance = async (userId) => {
   // Convert to string to ensure consistent comparison
   const userIdString = userId.toString();
-  console.log('🔄 autoRecalculateBalance called for userId:', userIdString);
   
   const transactions = await Transaction.find({ userId: userIdString });
-  console.log('📊 Found transactions:', transactions.length);
 
   let balance = 0;
   for (const transaction of transactions) {
     if (transaction.type === 'income') {
       balance += transaction.amount;
-      console.log(`  ✅ Income: +${transaction.amount}, balance: ${balance}`);
     } else {
       balance -= transaction.amount;
-      console.log(`  ❌ Expense: -${transaction.amount}, balance: ${balance}`);
     }
   }
-
-  console.log('💰 Calculated balance:', balance);
 
   const updatedUser = await User.findByIdAndUpdate(
     userIdString,
@@ -41,12 +35,9 @@ export const autoRecalculateBalance = async (userId) => {
   );
 
   if (!updatedUser) {
-    console.error('❌ User not found during balance update for userId:', userIdString);
     throw new Error('User not found during balance update');
   }
 
-  console.log('✅ Balance updated successfully to:', updatedUser.balance);
-  console.log('✅ Updated user object:', { _id: updatedUser._id, balance: updatedUser.balance, updatedAt: updatedUser.updatedAt });
   return balance;
 };
 
