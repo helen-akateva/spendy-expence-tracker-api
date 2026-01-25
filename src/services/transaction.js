@@ -10,17 +10,18 @@ export const validateTransactionCategoryMatch = async (type, categoryId) => {
     throw error;
   }
 
-  if (type === 'income' && category.name !== 'Incomes') {
+  // Check if transaction type matches category type
+  if (type === 'income' && category.type !== 'income') {
     const error = new Error(
-      'For income transactions, only "Incomes" category can be used',
+      'For income transactions, only income categories can be used',
     );
     error.status = 400;
     throw error;
   }
 
-  if (type === 'expense' && category.name === 'Incomes') {
+  if (type === 'expense' && category.type !== 'expense') {
     const error = new Error(
-      '"Incomes" category can only be used for income transactions',
+      'For expense transactions, only expense categories can be used',
     );
     error.status = 400;
     throw error;
