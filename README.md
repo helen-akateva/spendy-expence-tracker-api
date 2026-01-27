@@ -168,17 +168,17 @@ curl -X GET https://spendy-expence-tracker-api.onrender.com/users/current
 
 The API uses centralized error handling and returns standard HTTP status codes:
 
-| Code | Description                                      |
-| ---: | ------------------------------------------------ |
-|  200 | Success                                          |
-|  201 | Resource created                                 |
-|  204 | Success with no content (e.g., delete)           |
-|  400 | Validation error or insufficient funds           |
-|  401 | Unauthorized                                     |
-|  403 | Forbidden                                        |
-|  404 | Not found                                        |
-|  409 | Conflict (e.g. email already exists)             |
-|  500 | Internal server error                            |
+| Code | Description                            |
+| ---: | -------------------------------------- |
+|  200 | Success                                |
+|  201 | Resource created                       |
+|  204 | Success with no content (e.g., delete) |
+|  400 | Validation error or insufficient funds |
+|  401 | Unauthorized                           |
+|  403 | Forbidden                              |
+|  404 | Not found                              |
+|  409 | Conflict (e.g. email already exists)   |
+|  500 | Internal server error                  |
 
 ---
 
@@ -196,10 +196,23 @@ The API uses centralized error handling and returns standard HTTP status codes:
 
 ---
 
+## 📄 License
+
+This project was created for educational purposes.
+
 ## 👥 Team
 
 Developed by a team of developers as part of an educational project.
 Backend implementation follows production-oriented architectural principles.
+
+👩‍💻 **Olena Akatieva** - Team Lead, Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/olenaakatieva/)) <br>
+👨‍💻 **Denis Shulga** - Scrum Master, Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/denis-shullga/)) <br>
+👨‍💻 **Roman Kniazhyk** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/roman-kniazhyk/)) <br>
+👩‍💻 **Faina Kusiaka** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/faina-kusiaka-88008838b/)) <br>
+👨‍💻 **Anton Shuvalov** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/anton-shuvalov38/)) <br>
+👩‍💻 **Anastasiia Mamatova** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/anastasiia-mamatova/)) <br>
+👨‍💻 **Artem Ivanichenko** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/artem-ivanichenko/)) <br>
+👨‍💻 **Dmytro Kravchenko** - Fullstack Developer ([LinkedIn](https://www.linkedin.com/in/dima-k-bb9386119/))
 
 ---
 
