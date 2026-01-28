@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { Session } from '../models/session.js';
-import { ONE_HOUR, SEVEN_DAYS } from '../constants/time.js';
+import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 
 export const createSession = async (userId) => {
   const accessToken = crypto.randomBytes(30).toString('base64');
@@ -10,8 +10,8 @@ export const createSession = async (userId) => {
     userId,
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + ONE_HOUR),
-    refreshTokenValidUntil: new Date(Date.now() + SEVEN_DAYS),
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   });
 };
 
@@ -20,20 +20,20 @@ export const setSessionCookies = (res, session) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: ONE_HOUR,
+    maxAge: FIFTEEN_MINUTES,
   });
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: SEVEN_DAYS,
+    maxAge: ONE_DAY,
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: SEVEN_DAYS,
+    maxAge: ONE_DAY,
   });
 };
