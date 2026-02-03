@@ -13,10 +13,10 @@ REST API for tracking personal income and expenses with categorization, monthly 
 ## 🚀 Live Demo
 
 - **API Base URL:**
-  https://spendy-expence-tracker-api.onrender.com
+  https://spendy-expense-tracker-api.onrender.com
 
 - **Swagger Documentation:**
-  https://spendy-expence-tracker-api.onrender.com/api-docs
+  https://spendy-expense-tracker-api.onrender.com/api-docs
 
 > ⚠️ The project is deployed on Render free tier.
 > Cold start delays may occur after inactivity.
@@ -147,7 +147,7 @@ When testing the API using **Postman** or **Swagger UI**:
 ### Register
 
 ```bash
-curl -X POST https://spendy-expence-tracker-api.onrender.com/auth/register \
+curl -X POST https://spendy-expense-tracker-api.onrender.com/auth/register \
   -H "Content-Type: application/json" \
   -d '{"name":"John Doe","email":"john@example.com","password":"SecurePass123"}'
 ```
@@ -155,7 +155,7 @@ curl -X POST https://spendy-expence-tracker-api.onrender.com/auth/register \
 ### Login
 
 ```bash
-curl -X POST https://spendy-expence-tracker-api.onrender.com/auth/login \
+curl -X POST https://spendy-expense-tracker-api.onrender.com/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"john@example.com","password":"SecurePass123"}'
 ```
@@ -165,7 +165,7 @@ curl -X POST https://spendy-expence-tracker-api.onrender.com/auth/login \
 ### Get current user
 
 ```bash
-curl -X GET https://spendy-expence-tracker-api.onrender.com/users/current
+curl -X GET https://spendy-expense-tracker-api.onrender.com/users/current
 ```
 
 ---

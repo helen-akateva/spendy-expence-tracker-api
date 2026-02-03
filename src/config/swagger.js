@@ -13,7 +13,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://spendy-expence-tracker-api.onrender.com',
+        url: 'https://spendy-expense-tracker-api.onrender.com',
         description: 'Production server',
       },
     ],
